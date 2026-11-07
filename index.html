@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rangoli by Code – Digital Rangoli Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Poppins:wght@300;400;600&family=Noto+Sans+Gujarati:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#14040f;--pl:#2a0a3c;--mr:#5a0f2e;--gold:#ffd34d;--g2:#c9921b;--tx:#fbeed2;--mut:#d9b9a0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth}
+body{margin:0;font:400 15px/1.6 Poppins,'Noto Sans Gujarati',system-ui,sans-serif;color:var(--tx);background:radial-gradient(circle at 20% 0,var(--pl),transparent 55%),radial-gradient(circle at 90% 40%,var(--mr),transparent 50%),var(--bg);background-attachment:fixed;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.08;background:radial-gradient(circle,var(--gold) 1.2px,transparent 1.6px) 0 0/34px 34px}
+h1,h2,h3{font-family:'Cinzel Decorative',Georgia,serif;margin:0;font-weight:900}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+section,footer{position:relative;z-index:2}
+.hero{min-height:92vh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:32px;max-width:1200px;margin:0 auto;padding:48px 24px}
+.badge{display:inline-flex;gap:8px;align-items:center;padding:6px 16px;border-radius:99px;border:1px solid var(--gold);background:#ffd34d1c;color:var(--gold);font-size:13px;letter-spacing:.04em;box-shadow:0 0 18px #ffd34d44}
+.hero h1{font-size:clamp(34px,5.4vw,66px);line-height:1.12;margin:20px 0 14px;background:linear-gradient(120deg,#fff3b8,#ffd34d 40%,#c9921b 70%,#ffe9a0);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px #ffb30055)}
+.sub{font-size:19px;color:var(--mut);max-width:480px;margin:0 0 22px}
+.greet{height:44px;font:700 26px 'Cinzel Decorative','Poppins',serif;color:var(--gold);text-shadow:0 0 14px #ffb300aa;transition:opacity .5s,transform .5s;margin-bottom:22px}
+.greet.out{opacity:0;transform:translateY(8px)}
+.btn{border:1px solid #ffd34d77;background:#ffffff0c;padding:9px 14px;border-radius:12px;transition:.25s}
+.btn:hover{background:#ffd34d22;border-color:var(--gold);transform:translateY(-2px)}
+.btn.on{background:linear-gradient(135deg,#ffd34d,#c9921b);color:#2a0a1c;border-color:#ffe9a0;font-weight:600;box-shadow:0 0 16px #ffd34d66}
+.cta{font-size:17px;font-weight:600;padding:15px 34px;border-radius:99px;border:0;color:#3a0d1a;background:linear-gradient(135deg,#fff1b0,#ffd34d 45%,#c9921b);box-shadow:0 0 0 4px #ffd34d33,0 10px 34px #ffb30066;animation:pulse 2.6s infinite}
+.cta:hover{transform:scale(1.05)}
+@keyframes pulse{50%{box-shadow:0 0 0 12px #ffd34d00,0 10px 44px #ffb300aa}}
+.pv{justify-self:center;width:min(440px,84vw);aspect-ratio:1;border-radius:50%;padding:10px;background:conic-gradient(#fff1b0,#c9921b,#ffd34d,#8c5a0f,#fff1b0);box-shadow:0 0 70px #ffb30066}
+.pv canvas{width:100%;height:100%;border-radius:50%;display:block;animation:spin 70s linear infinite;transition:opacity .7s}
+@keyframes spin{to{transform:rotate(360deg)}}
+section[data-v]:not(.on){display:none}
+section[data-v].on{animation:pg .55s ease}
+@keyframes pg{from{opacity:0;transform:translateY(16px)}}
+nav{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:6px 14px;flex-wrap:wrap;padding:10px 22px;background:#14040fd9;backdrop-filter:blur(10px);border-bottom:1px solid #ffd34d44}
+nav b{font:900 17px 'Cinzel Decorative',serif;color:var(--gold)}
+nav div{display:flex;gap:4px;flex-wrap:wrap}
+nav button{background:none;border:0;padding:6px 15px;border-radius:99px;color:var(--mut);transition:.25s}
+nav button:hover{color:var(--gold)}nav button.on{background:var(--gold);color:#3a0d1a;font-weight:600}
+.orn{display:none;text-align:center;color:var(--gold);letter-spacing:.6em;opacity:.8;margin:8px 0}
+.wrap{max-width:1280px;margin:0 auto;padding:30px 20px}
+.ttl{text-align:center;font-size:clamp(24px,3.4vw,38px);color:var(--gold);margin-bottom:6px}
+.tsub{text-align:center;color:var(--mut);margin:0 0 24px}
+#studio{padding:28px 0;background:var(--bg)}
+#studio:fullscreen{overflow:auto;display:flex;align-items:center}
+.studio{display:grid;grid-template-columns:260px minmax(0,1fr) 270px;gap:18px;align-items:start}
+.panel{background:linear-gradient(160deg,#3a0f3d99,#1c061899);border:1px solid #ffd34d55;border-radius:18px;padding:16px;backdrop-filter:blur(6px);display:flex;flex-direction:column;gap:12px}
+.panel h3{font-size:14px;color:var(--gold);letter-spacing:.06em}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.lab{display:flex;justify-content:space-between;font-size:13px;color:var(--mut)}
+input[type=range]{width:100%;accent-color:var(--gold)}
+.sw{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.sw i{width:30px;height:30px;border-radius:50%;border:2px solid #fff4;cursor:pointer;transition:.2s}
+.sw i.on,.sw i:hover{transform:scale(1.2);border-color:#fff;box-shadow:0 0 14px currentColor}
+.pal{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.pal button{padding:6px 8px;font-size:12px;text-align:left}
+.pal b{display:block;height:6px;border-radius:4px;margin-top:4px}
+input[type=color]{width:34px;height:34px;border:2px solid var(--gold);border-radius:50%;padding:0;background:none}
+.name{width:100%;padding:10px 12px;border-radius:12px;border:1px solid #ffd34d77;background:#00000040;color:var(--tx);font:inherit}
+.stage{position:relative;max-width:760px;width:100%;margin:0 auto;padding:34px}
+.frame{position:relative;aspect-ratio:1;border:4px solid transparent;border-radius:22px;background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(135deg,#fff1b0,#c9921b,#ffd34d,#8c5a0f) border-box;box-shadow:0 0 50px #ffb30055,inset 0 0 30px #000}
+#cv{width:100%;height:100%;border-radius:18px;touch-action:none;cursor:crosshair;display:block}
+.dr{position:absolute;display:flex;justify-content:space-between;font-size:22px;pointer-events:none}
+.dr.h{left:14px;right:14px;height:30px}.dr.v{top:14px;bottom:14px;width:30px;flex-direction:column}
+.dr.t{top:2px}.dr.b{bottom:2px}.dr.l{left:2px}.dr.r{right:2px}
+.dr span{opacity:.35;filter:grayscale(1) brightness(.6);transition:.6s}.dr span.lit{opacity:1;animation:fl 1.8s ease-in-out infinite;filter:drop-shadow(0 0 7px #ffb300)}
+@keyframes fl{50%{transform:scale(1.18);filter:drop-shadow(0 0 14px #ffe066) brightness(1.3)}}
+.tip{max-width:760px;margin:0 auto 14px;padding:12px 18px;border:1px solid var(--gold);border-radius:16px;background:#ffd34d18;display:flex;gap:14px;align-items:center;justify-content:space-between;font-size:14px}.tip.h{display:none}
+nav select{background:#00000055;color:var(--tx);border:1px solid #ffd34d77;border-radius:99px;padding:5px 10px;font:inherit;margin-left:6px}
+#bar{grid-template-columns:repeat(auto-fit,minmax(112px,1fr));max-width:760px;margin:6px auto 0}
+#fest{grid-template-columns:1fr 1fr}
+.mid{min-width:0}
+.guide{position:absolute;inset:0;border-radius:18px;pointer-events:none;opacity:0;transition:opacity .4s;background:radial-gradient(circle,#ffd34dcc 2px,transparent 2.8px) 0 0/9.0909% 9.0909%,repeating-radial-gradient(circle at center,transparent 0 11.5%,#ffd34d2e 11.5% 12%)}.guide.on{opacity:1}
+input[type=checkbox]{accent-color:var(--gold);width:18px;height:18px}
+#lp{width:100%;aspect-ratio:1;border-radius:14px;border:1px solid #ffd34d66;background:#000}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.card{position:relative;border:1px solid #ffd34d55;border-radius:16px;padding:8px;background:#ffffff08;cursor:pointer;transition:.3s;text-align:center}
+.card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 12px 30px #ffb30044;border-color:var(--gold)}
+.card canvas{width:100%;aspect-ratio:1;border-radius:10px;display:block}
+.card p{margin:6px 0 2px;font-size:13px}
+.tag{position:absolute;top:14px;left:14px;font-size:11px;padding:2px 9px;border-radius:9px;background:#ffd34dee;color:#3a0d1a;font-weight:600}
+.x{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;border:0;background:#000b;color:#fff;line-height:1}
+.empty{grid-column:1/-1;text-align:center;color:var(--mut);padding:24px;border:1px dashed #ffd34d55;border-radius:16px}
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,90px);background:linear-gradient(135deg,#ffd34d,#c9921b);color:#3a0d1a;padding:11px 22px;border-radius:99px;font-weight:600;z-index:50;transition:.4s;box-shadow:0 8px 30px #000a}
+#toast.show{transform:translate(-50%,0)}
+footer{text-align:center;padding:36px 16px;color:var(--mut)}
+@media(max-width:1020px){.hero{grid-template-columns:1fr;text-align:center;min-height:auto}.sub{margin-inline:auto}.studio{grid-template-columns:1fr}.mid{order:-1}.stage{padding:26px 14px}.pv{order:-1}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<canvas id="fx"></canvas>
+<nav id="nav"><b>🪔 Rangoli by Code</b><div><button data-go="home" class="on">Home</button><button data-go="studio">Studio</button><button data-go="gallery">Gallery</button><button data-go="saved">My Designs</button><button id="snd" aria-label="Toggle sound">🔔</button><select id="lang" aria-label="Language"><option value="en">English</option><option value="hi">हिन्दी</option><option value="gu">ગુજરાતી</option></select></div></nav>
+
+<section class="hero" data-v="home">
+ <div>
+  <span class="badge">🪔 Festive Special · Light, Joy &amp; Colour</span>
+  <h1>Create Your Own Digital Rangoli</h1>
+  <p class="sub">Where Indian Tradition Meets the Magic of Code.</p>
+  <div class="greet" id="greet">उत्सव की शुभकामनाएँ</div>
+  <button class="cta" id="start">Start Creating</button> <button class="btn" data-go="gallery" style="margin-left:10px">Browse Gallery</button>
+ </div>
+ <div class="pv"><canvas id="pv" width="480" height="480"></canvas></div>
+</section>
+
+<div class="orn">❖ ❖ ❖</div>
+
+<section id="studio" data-v="studio"><div class="wrap">
+ <h2 class="ttl">The Rangoli Studio</h2>
+ <p class="tsub">Draw with your finger or mouse — every stroke is mirrored around the centre, just like a painted floor rangoli.</p>
+ <div class="tip" id="tip"><span>💡 Tip: the symmetry slider mirrors every stroke around the centre. Tick “Layer on top” to stack generated designs, and use Guide dots to line things up.</span><button class="btn" id="tipx">Got it</button></div>
+ <div class="tip" id="daily"><span id="dtx"></span><button class="btn" id="dgo"><span>Mark done 🔥</span> <b id="stk">0</b></button></div>
+ <div class="studio">
+  <div class="panel">
+   <h3>Brush</h3>
+   <div class="grid2" id="modes">
+    <button class="btn on" data-m="draw">✏️ Draw</button><button class="btn" data-m="dot">● Dots</button>
+    <button class="btn" data-m="circle">◎ Circles</button><button class="btn" data-m="flower">✿ Flowers</button>
+    <button class="btn" data-m="geo">✦ Stars</button><button class="btn" data-m="powder">✨ Powder</button><button class="btn" data-m="erase" style="grid-column:span 2">🧽 Eraser</button>
+   </div>
+   <div><div class="lab"><span>Symmetry</span><b id="nv">8-fold</b></div><input type="range" id="sym" min="4" max="16" value="8"></div>
+   <div><div class="lab"><span>Brush size</span><b id="zv">8</b></div><input type="range" id="size" min="2" max="30" value="8"></div>
+   <button class="btn on" id="mir">Mirror reflection: On</button>
+   <h3>Floor</h3><div class="grid2" id="floors"></div><h3>Colours</h3>
+   <div class="pal" id="pals"></div>
+   <div class="sw" id="sws"></div>
+   <div class="sw"><input type="color" id="cc" value="#ffd700" aria-label="Custom colour"><button class="btn" id="rnd" style="flex:1">🎲 Random colours</button></div>
+  </div>
+
+  <div class="stage" id="stage">
+   <div class="dr h t"></div><div class="dr h b"></div><div class="dr v l"></div><div class="dr v r"></div>
+   <div class="frame"><canvas id="cv" width="900" height="900"></canvas><div class="guide" id="guide"></div></div>
+  </div>
+
+  <div class="panel">
+   <h3>Name your rangoli</h3>
+   <input class="name" id="nm" maxlength="40" value="My Festive Rangoli" aria-label="Rangoli name">
+   <input class="name" id="gr" maxlength="50" value="Happy Festive Season" aria-label="Greeting on PNG" placeholder="Greeting printed on your PNG">
+   <h3>Festival mode</h3><div class="grid3" id="fest"></div>
+   <h3>Pattern generator</h3>
+   <div class="grid2" id="kinds"></div>
+   <button class="btn on" id="gen">✨ Generate New Design</button>
+   <button class="btn" id="sur">🎁 Surprise Me (random style + colours)</button>
+   <label class="lab"><span>Layer on top, keep my canvas</span><input type="checkbox" id="lay"></label>
+   <div><div class="lab"><span>Pattern size (live)</span></div><input type="range" id="psc" min="60" max="110" value="100"></div>
+   <div><div class="lab"><span>Detail layers (live)</span></div><input type="range" id="ply" min="3" max="8" value="8"></div>
+   <h3>Actions</h3>
+   <div class="grid2">
+    <button class="btn" id="undo">↶ Undo</button><button class="btn" id="redo">↷ Redo</button>
+    <button class="btn" id="clear">🧹 Clear</button><button class="btn" id="reset">⟲ Reset</button>
+    <button class="btn" id="save">💾 Save</button><button class="btn" id="share">🔗 Share</button>
+    <button class="btn" id="dl">⬇ PNG</button><button class="btn" id="fs">⛶ Full screen</button>
+    <button class="btn" id="rp">▶ Replay</button><button class="btn" id="gd">⚹ Guide dots</button>
+    <button class="btn" id="vid">🎬 Video</button><button class="btn" id="cd">🎴 Greeting card</button><button class="btn" id="cx">📋 Copy code</button><button class="btn" id="ci">📥 Import code</button>
+    <input class="name" id="code" placeholder="Design code appears here — paste a friend's code and press Import" style="grid-column:span 2">
+   </div>
+   <h3>Live preview</h3><canvas id="lp" width="220" height="220"></canvas>
+  </div>
+ </div>
+</div></section>
+
+<div class="orn">❖ ❖ ❖</div>
+<section class="wrap" data-v="gallery"><h2 class="ttl">Pattern Gallery</h2><p class="tsub">Ready-made rangolis — tap one to load it into the studio. Gold-tagged designs are part of the festive collection.</p><div class="gal" id="gal"></div></section>
+<section class="wrap" data-v="saved"><h2 class="ttl">My Saved Designs</h2><p class="tsub">Stored privately in this browser.</p><div class="gal" id="saved"></div></section>
+<footer>🪔 Rangoli by Code · Happy Festive Season · Made with geometry, light &amp; love 🪔</footer>
+<div id="toast"></div>
+
+<script>
+const $=s=>document.querySelector(s),TAU=Math.PI*2,C=450;
+const PAL={'Royal Gold':['#ffd700','#f5b942','#c9921b','#fff1b0','#8c5a0f','#ffe27a'],'Diwali Glow':['#ff3d00','#ff9100','#ffd600','#e91e63','#ff5252','#fff59d'],'Peacock Dreams':['#00b8a9','#0077b6','#3a0ca3','#00e5ff','#7b2cbf','#ffd60a'],'Traditional Indian':['#d90429','#ff7b00','#ffd60a','#2d6a4f','#f8f9fa','#ff4d6d'],'Sunset Festival':['#ff6b6b','#ffa94d','#ffe066','#f06595','#b197fc','#ff8787'],'Pastel Elegance':['#ffc8dd','#cdb4db','#bde0fe','#a2d2ff','#fde4cf','#b9fbc0']};
+const KINDS={mandala:'🌀 Mandala',floral:'🌸 Floral',peacock:'🦚 Peacock',geo:'🔷 Geometric',diya:'🪔 Diya',lotus:'🪷 Lotus',gold:'👑 Golden'};
+const st={floor:0,mode:'draw',n:8,size:8,mirror:true,pal:'Royal Gold',cols:[...PAL['Royal Gold']],col:'#ffd700',kind:'mandala'};
+let acts=[],redo=[],cur=null,dirty=true;
+
+/* ---------- geometry helpers (origin = canvas centre, "up" = outward) ---------- */
+function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const ring=(x,n,r,f,o=0)=>{for(let i=0;i<n;i++){x.save();x.rotate(i*TAU/n+o);x.translate(0,-r);f(i);x.restore()}};
+const petal=(x,l,w,f,s)=>{x.beginPath();x.moveTo(0,0);x.quadraticCurveTo(w,-l*.5,0,-l);x.quadraticCurveTo(-w,-l*.5,0,0);x.fillStyle=f;x.fill();if(s){x.strokeStyle=s;x.lineWidth=1.5;x.stroke()}};
+const dot=(x,r,c)=>{x.beginPath();x.arc(0,0,r,0,TAU);x.fillStyle=c;x.fill()};
+const circ=(x,r,c,w=2)=>{x.beginPath();x.arc(0,0,r,0,TAU);x.strokeStyle=c;x.lineWidth=w;x.stroke()};
+const poly=(x,n,r,k,c,f)=>{x.beginPath();for(let i=0;i<n;i++){const a=i*k*TAU/n-Math.PI/2;x[i?'lineTo':'moveTo'](Math.cos(a)*r,Math.sin(a)*r)}x.closePath();if(f){x.fillStyle=c;x.fill()}else{x.strokeStyle=c;x.lineWidth=3;x.stroke()}};
+const eye=(x,s,cs)=>[1,.8,.6,.4,.2].forEach((k,i)=>{x.beginPath();x.ellipse(0,-s*.9,s*.45*k,s*.95*k,0,0,TAU);x.fillStyle=cs[i%cs.length];x.fill()});
+function diya(x,s,c){x.beginPath();x.arc(0,0,s,0,Math.PI);x.closePath();x.fillStyle=c;x.fill();x.save();x.shadowColor='#ffb300';x.shadowBlur=14;x.beginPath();x.moveTo(0,-s*.1);x.quadraticCurveTo(s*.6,-s,0,-s*1.9);x.quadraticCurveTo(-s*.6,-s,0,-s*.1);x.fillStyle='#ffb300';x.fill();x.translate(0,-s*.1);petal(x,s*.9,s*.25,'#fff3b0');x.restore()}
+function lotus(x,p,sc){x.save();x.scale(sc,sc);[210,175,140,108,78,50].forEach((l,i)=>{const n=[24,20,16,12,10,8][i];ring(x,n,0,()=>petal(x,l,l*.27,p[i%p.length],'#ffffff88'),i%2*TAU/n/2)});dot(x,16,'#fff3b0');x.restore()}
+function unit(x,t,s,c,d){
+ if(t=='p')petal(x,s*1.7,s*.5,c,d);else if(t=='d')dot(x,s*.35,c);
+ else if(t=='c'){circ(x,s*.5,c,3);dot(x,s*.16,d)}else if(t=='m')poly(x,4,s*.7,1,c,true);
+ else if(t=='s')poly(x,8,s*.7,3,c,true);
+ else if(t=='f'){ring(x,6,s*.2,()=>petal(x,s*.55,s*.2,c,d));dot(x,s*.14,d)}
+ else if(t=='l')petal(x,s*1.9,s*.35,'#2d9a5a','#8dffb0');else if(t=='y')diya(x,s*.5,c);
+ else if(t=='e')eye(x,s*1.1,[c,d,'#ffd60a',c,'#111'])}
+const T={mandala:['p','d','c','m','s','f'],floral:['f','l','p','d','f'],peacock:['e','p','d','c'],gold:['p','s','d','m','c','y']};
+function build(a,x){
+ const r=rng(a.seed),p=a.pal,k=a.k,pk=A=>A[Math.floor(r()*A.length)];
+ if(k=='gold')x.shadowBlur=14;
+ if(k=='geo'){
+  for(let L=0;L<7;L++){const rad=420-L*56,n=pk([6,8,10,12,16]),kk=1+Math.floor(r()*(n/2-1));
+   poly(x,n,rad,kk,p[L%p.length],false);ring(x,n,rad,()=>dot(x,5,p[(L+2)%p.length]))}
+  dot(x,26,p[0]);dot(x,10,'#fff3b0');
+ }else if(k=='lotus'){
+  ring(x,32,425,()=>dot(x,5,p[3]));ring(x,16,330,()=>petal(x,90,26,p[4%p.length],p[1]),TAU/32);lotus(x,p,1.6);
+ }else if(k=='diya'){
+  ring(x,16,400,()=>dot(x,5,p[2]));ring(x,12,330,()=>diya(x,28,p[0]));
+  ring(x,12,250,()=>petal(x,60,22,p[1],p[3]),TAU/24);ring(x,12,190,()=>dot(x,8,p[4%p.length]));lotus(x,p,.8);
+ }else{
+  ring(x,48,432,()=>dot(x,4,p[2]));let rad=350;
+  for(let L=0;L<(a.ly||8)&&rad>60;L++){const s=14+rad*.1,n=Math.max(8,Math.round(rad*TAU/(s*1.2)/4)*4),t=pk(T[k]),c=p[(L+Math.floor(r()*3))%p.length],d=p[(L+3)%p.length];
+   ring(x,n,rad,()=>unit(x,t,s,c,d),L%2*TAU/n/2);rad-=s*1.3+r()*12}
+  if(k=='gold'){ring(x,12,392,()=>diya(x,20,p[0]),TAU/24);lotus(x,p,.55)}
+  else{dot(x,28,p[0]);circ(x,38,p[1],3);dot(x,12,'#fff3b0')}
+ }}
+/* ---------- action rendering (vector replay → crisp at any size) ---------- */
+function sym(x,a,f){x.save();x.translate(C,C);for(let i=0;i<a.n;i++)for(const m of a.mi?[1,-1]:[1]){x.save();x.rotate(i*TAU/a.n);x.scale(m,1);f();x.restore()}x.restore()}
+function shape(x,k,r,c){
+ if(k=='powder'){x.shadowBlur=0;x.fillStyle=c;const h=j=>{const v=Math.sin(j*127.1+SEED*311.7)*43758.5;return v-Math.floor(v)};for(let i=0;i<16;i++){const g=h(i*2)*TAU,d=Math.sqrt(h(i*2+1))*r*1.4;x.beginPath();x.arc(Math.cos(g)*d,Math.sin(g)*d,1+h(i+40)*2.2,0,TAU);x.fill()}}else if(k=='dot')dot(x,r,c);else if(k=='circle'){circ(x,r,c,Math.max(2,r/4));dot(x,r/3,c)}
+ else if(k=='flower'){ring(x,8,0,()=>petal(x,r*1.3,r*.4,c,'#fff6'));dot(x,r*.3,'#fff3b0')}
+ else{poly(x,8,r*1.2,3,c,true);dot(x,r*.3,'#fff3b0')}}
+function drawAct(x,a,from=0){
+ x.save();x.lineCap=x.lineJoin='round';x.shadowColor=a.c;x.shadowBlur=a.t=='pat'||a.er?0:8;
+ if(a.t=='pat'){x.translate(C,C);x.scale(a.sc||1,a.sc||1);build(a,x)}
+ else if(a.t=='stroke'){x.strokeStyle=a.c;x.lineWidth=a.z;
+  for(let i=Math.max(1,from);i<a.p.length;i++){const p=a.p[i-1],q=a.p[i];sym(x,a,()=>{if(a.er)x.strokeStyle=fg(x,0);x.beginPath();x.moveTo(p[0]-C,p[1]-C);x.lineTo(q[0]-C,q[1]-C);x.stroke()})}}
+ else for(let i=from;i<a.p.length;i++){const q=a.p[i];SEED=q[0]*.013+q[1]*.007;sym(x,a,()=>{x.save();x.translate(q[0]-C,q[1]-C);shape(x,a.t,a.z*1.6,a.c);x.restore()})}
+ x.restore()}
+const FL=[['Maroon','#3d0e2c','#12040f'],['Slate','#2c3340','#0b0e13'],['Terracotta','#a85a38','#4f2312'],['Cream','#fff3da','#e6c995']];let SEED=0;
+function fg(x,o){const g=x.createRadialGradient(o,o,0,o,o,640),f=FL[st.floor];g.addColorStop(0,f[1]);g.addColorStop(1,f[2]);return g}
+function bg(x){x.fillStyle=fg(x,C);x.fillRect(0,0,900,900)}
+function render(x,A,s){x.setTransform(s/900,0,0,s/900,0,0);bg(x);for(const a of A){if(a.fresh||a.t=='clear')bg(x);if(a.t!='clear')drawAct(x,a)}}
+
+/* ---------- state ---------- */
+const cv=$('#cv'),ctx=cv.getContext('2d');
+const full=()=>{render(ctx,acts,900);dirty=true;sync()};
+const sync=()=>{$('#undo').style.opacity=acts.length?1:.4;$('#redo').style.opacity=redo.length?1:.4};
+const push=a=>{acts.push(a);redo=[];full()};
+const mk=(k,seed,cols)=>({t:'pat',k,seed,pal:k=='gold'?PAL['Royal Gold']:[...cols],c:cols[0],fresh:1,sc:+$('#psc').value/100,ly:+$('#ply').value});
+let busy=0;
+function bloom(a){if(busy)return;busy=1;const t0=performance.now();
+ (function f(t){const p=Math.min(1,(t-t0)/1400),e=1-Math.pow(1-p,3);render(ctx,acts,900);
+  ctx.save();ctx.beginPath();ctx.arc(C,C,e*C*1.45,0,TAU);ctx.clip();if(a.fresh)bg(ctx);drawAct(ctx,a);ctx.restore();dirty=true;
+  if(p<1)requestAnimationFrame(f);else{busy=0;push(a);light()}})(t0)}
+const gen=k=>{st.kind=k||st.kind;kinds();const a=mk(st.kind,Math.random()*1e9|0,st.cols);if($('#lay').checked)delete a.fresh;bloom(a)};
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('show'),2400)};
+const nm=()=>$('#nm').value.trim()||'My Rangoli';
+
+/* ---------- pointer drawing (mouse + touch + pen) ---------- */
+const pt=e=>{const r=cv.getBoundingClientRect();return[Math.round((e.clientX-r.left)*900/r.width),Math.round((e.clientY-r.top)*900/r.height)]};
+cv.addEventListener('pointerdown',e=>{e.preventDefault();if(busy)return;cv.setPointerCapture(e.pointerId);const q=pt(e),s=st.mode=='draw'||st.mode=='erase';
+ const er=st.mode=='erase'?1:0;cur={t:s?'stroke':st.mode,c:st.col,z:er?st.size*2.5:st.size,er,n:st.n,mi:st.mirror,p:s?[q,q]:[q]};ctx.setTransform(1,0,0,1,0,0);drawAct(ctx,cur,s?1:0);dirty=true});
+cv.addEventListener('pointermove',e=>{if(!cur)return;const q=pt(e),l=cur.p.at(-1);
+ if(Math.hypot(q[0]-l[0],q[1]-l[1])<(cur.t=='stroke'?2:st.size*3.2))return;cur.p.push(q);drawAct(ctx,cur,cur.p.length-1);dirty=true});
+const end=()=>{if(cur){acts.push(cur);redo=[];cur=null;sync()}};
+cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+
+/* ---------- UI wiring ---------- */
+function kinds(){const k=$('#kinds');k.innerHTML='';for(const n in KINDS){const b=document.createElement('button');b.className='btn'+(n==st.kind?' on':'');b.textContent=KINDS[n];b.onclick=()=>gen(n);k.append(b)}}
+function swatches(){const s=$('#sws');s.innerHTML='';st.cols.forEach(c=>{const i=document.createElement('i');i.style.background=i.style.color=c;i.className=c==st.col?'on':'';i.onclick=()=>{st.col=c;$('#cc').value=c;swatches()};s.append(i)})}
+function pals(){const p=$('#pals');p.innerHTML='';for(const n in PAL){const b=document.createElement('button');b.className='btn'+(n==st.pal?' on':'');b.innerHTML=n+'<b style="background:linear-gradient(90deg,'+PAL[n].join(',')+')"></b>';b.onclick=()=>{st.pal=n;st.cols=[...PAL[n]];st.col=st.cols[0];$('#cc').value=st.col;pals();swatches()};p.append(b)}}
+document.querySelectorAll('#modes .btn').forEach(b=>b.onclick=()=>{st.mode=b.dataset.m;document.querySelectorAll('#modes .btn').forEach(x=>x.classList.toggle('on',x==b))});
+$('#sym').oninput=e=>{st.n=+e.target.value;$('#nv').textContent=st.n+'-fold'};
+$('#size').oninput=e=>{st.size=+e.target.value;$('#zv').textContent=st.size};
+$('#mir').onclick=e=>{st.mirror=!st.mirror;e.target.classList.toggle('on',st.mirror);e.target.textContent='Mirror reflection: '+(st.mirror?'On':'Off')};
+$('#cc').oninput=e=>{st.col=e.target.value;swatches()};
+$('#rnd').onclick=()=>{const h=Math.random()*360,o=[0,30,60,180,210,300].sort(()=>Math.random()-.5);st.pal='';st.cols=o.map((d,i)=>`hsl(${Math.round(h+d)%360} ${75+i*3}% ${52+i*3}%)`);
+ const t=document.createElement('canvas').getContext('2d');st.cols=st.cols.map(c=>{t.fillStyle=c;return t.fillStyle});st.col=st.cols[0];$('#cc').value=st.col;pals();swatches();toast('New colour combination ready')};
+$('#undo').onclick=()=>{if(acts.length){redo.push(acts.pop());full()}};
+$('#redo').onclick=()=>{if(redo.length){acts.push(redo.pop());full()}};
+$('#clear').onclick=()=>{push({t:'clear'});toast('Canvas cleared — Undo brings it back')};
+$('#reset').onclick=()=>{acts=[];redo=[];Object.assign(st,{n:8,size:8,mirror:true,pal:'Royal Gold',cols:[...PAL['Royal Gold']],col:'#ffd700',mode:'draw'});
+ $('#sym').value=8;$('#size').value=8;$('#nv').textContent='8-fold';$('#zv').textContent=8;$('#nm').value='My Festive Rangoli';$('#cc').value='#ffd700';
+ $('#mir').classList.add('on');$('#mir').textContent='Mirror reflection: On';document.querySelectorAll('#modes .btn').forEach(x=>x.classList.toggle('on',x.dataset.m=='draw'));pals();swatches();full();toast('Studio reset')};
+$('#gen').onclick=()=>gen();
+$('#sur').onclick=()=>{const ks=Object.keys(KINDS),pn=Object.keys(PAL),p=pn[Math.random()*pn.length|0];st.pal=p;st.cols=[...PAL[p]];st.col=st.cols[0];$('#cc').value=st.col;pals();swatches();gen(ks[Math.random()*ks.length|0])};
+$('#gd').onclick=e=>e.target.classList.toggle('on',$('#guide').classList.toggle('on'));
+$('#rp').onclick=()=>{if(!acts.length||busy)return;busy=1;const A=acts.slice();let i=0;render(ctx,[],900);dirty=true;
+ (function s(){if(i>=A.length){busy=0;full();return}const a=A[i++];if(a.fresh||a.t=='clear')bg(ctx);if(a.t!='clear')drawAct(ctx,a);dirty=true;setTimeout(s,Math.min(250,3000/A.length))})()};
+/* ---------- page navigation (separate views, no scrolling) ---------- */
+const VIEWS=['home','studio','gallery','saved'];let first=0;
+function go(v,setHash=1){if(!VIEWS.includes(v))v='home';
+ document.querySelectorAll('[data-v]').forEach(s=>s.classList.toggle('on',s.dataset.v==v));
+ document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.go==v));
+ if(setHash&&location.hash!='#'+v){try{location.hash=v}catch(e){}}
+ scrollTo(0,0);dirty=true;
+ if(v=='studio'&&!first){first=1;setTimeout(light,300);if(!acts.length)setTimeout(()=>gen('mandala'),450)}}
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+$('#start').onclick=()=>go('studio');
+addEventListener('hashchange',()=>go(location.hash.slice(1),0));
+/* ---------- extras: floors, tuning, festivals, video, cards, codes, sound, daily challenge ---------- */
+const light=()=>document.querySelectorAll('.dr span').forEach((s,i)=>setTimeout(()=>s.classList.add('lit'),i*70));
+const out=async(b,f)=>{try{const d=window.claude&&await claude.use('downloads');if(d){await d.save({filename:f,data:b});toast('Saved ✨');return}}catch(e){if(e&&e.code=='declined')return}const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=f;a.click()};
+const slug=()=>nm().replace(/[^\w]+/g,'-').toLowerCase();
+function floors(){const f=$('#floors');f.innerHTML='';FL.forEach((o,i)=>{const b=document.createElement('button');b.className='btn'+(i==st.floor?' on':'');b.textContent=o[0];b.onclick=()=>{st.floor=i;floors();full()};f.append(b)})}
+['#psc','#ply'].forEach(s=>$(s).oninput=()=>{const l=acts.at(-1);if(l&&l.t=='pat'){l.sc=$('#psc').value/100;l.ly=+$('#ply').value;full()}});
+const FE={Festive:['Royal Gold','Happy Festive Season'],Diwali:['Diwali Glow','Shubh Deepavali'],Navratri:['Traditional Indian','Shubh Navratri'],Pongal:['Sunset Festival','Happy Pongal'],Onam:['Pastel Elegance','Happy Onam']};
+for(const n in FE){const b=document.createElement('button');b.className='btn';b.textContent=n;b.onclick=()=>{st.pal=FE[n][0];st.cols=[...PAL[st.pal]];st.col=st.cols[0];$('#cc').value=st.col;$('#gr').value=FE[n][1];pals();swatches();toast(n+' mode: palette and greeting set')};$('#fest').append(b)}
+function replay(cb){if(!acts.length||busy)return;busy=1;const A=acts.slice();let i=0;render(ctx,[],900);dirty=true;(function s(){if(i>=A.length){busy=0;full();cb&&cb();return}const a=A[i++];if(a.fresh||a.t=='clear')bg(ctx);if(a.t!='clear')drawAct(ctx,a);dirty=true;setTimeout(s,Math.min(250,3000/A.length))})()}
+$('#rp').onclick=()=>replay();
+$('#vid').onclick=()=>{if(!window.MediaRecorder||!cv.captureStream)return toast('Video export is not supported in this browser');if(!acts.length||busy)return toast('Create a rangoli first');
+ const ch=[],r=new MediaRecorder(cv.captureStream(30));r.ondataavailable=e=>ch.push(e.data);r.onstop=()=>out(new Blob(ch,{type:'video/webm'}),slug()+'.webm');r.start();toast('Recording timelapse…');replay(()=>setTimeout(()=>r.stop(),400))};
+$('#cd').onclick=()=>{if(!acts.length)return toast('Create a rangoli first');const W=1080,H=1920,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d'),g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#2a0a3c');g.addColorStop(1,'#5a0f2e');x.fillStyle=g;x.fillRect(0,0,W,H);
+ const r=document.createElement('canvas');r.width=r.height=1800;render(r.getContext('2d'),acts,1800);
+ x.strokeStyle='#ffd34d';x.lineWidth=10;x.strokeRect(30,30,W-60,H-60);x.lineWidth=3;x.strokeRect(54,54,W-108,H-108);
+ x.textAlign='center';x.shadowColor='#ffb300';x.shadowBlur=24;x.fillStyle='#ffd34d';x.font='900 80px Georgia,serif';x.fillText($('#gr').value.trim()||'Happy Festive Season',W/2,300);x.font='70px serif';x.fillText('🪔  🪔  🪔  🪔  🪔',W/2,430);
+ x.save();x.beginPath();x.arc(W/2,1000,430,0,TAU);x.clip();x.drawImage(r,W/2-430,570,860,860);x.restore();x.beginPath();x.arc(W/2,1000,436,0,TAU);x.lineWidth=12;x.stroke();
+ x.font='italic 52px Georgia,serif';x.fillStyle='#fbeed2';x.fillText(nm(),W/2,1610);x.font='38px Georgia,serif';x.fillText('May light and prosperity fill your home',W/2,1690);x.fillText('Rangoli by Code',W/2,1790);c.toBlob(b=>out(b,slug()+'-card.png'))};
+$('#cx').onclick=async()=>{if(!acts.length)return toast('Nothing to copy yet');const s=btoa(unescape(encodeURIComponent(JSON.stringify({n:nm(),f:st.floor,a:acts}))));$('#code').value=s;try{await navigator.clipboard.writeText(s);toast('Design code copied — send it to a friend')}catch(e){$('#code').select();toast('Code is in the box — copy it manually')}};
+$('#ci').onclick=()=>{try{const o=JSON.parse(decodeURIComponent(escape(atob($('#code').value.trim()))));if(!Array.isArray(o.a))throw 0;acts=o.a;redo=[];st.floor=o.f|0;$('#nm').value=String(o.n||'Imported rangoli').slice(0,40);floors();full();toast('Design imported ✨')}catch(e){toast('That code is not valid')}};
+let ac,sn;$('#snd').onclick=e=>{if(sn){clearInterval(sn);sn=0;e.target.textContent='🔔';return}ac=ac||new(window.AudioContext||window.webkitAudioContext)();e.target.textContent='🔕';
+ const note=()=>{const f=261.63*Math.pow(2,[0,2,4,7,9,12,14][Math.random()*7|0]/12)*(Math.random()<.3?.5:1),t=ac.currentTime;[1,2.76].forEach((m,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f*m;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.05/(i+1),t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+3);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+3.1)})};note();sn=setInterval(note,1600)};
+const DP=['Draw a lotus using only three colours','Make a 12-fold mandala with gold and one other colour','Layer a diya ring over a floral design','Create a peacock design on a terracotta floor','Draw a rangoli using only dots and circles','Use 16-fold symmetry for your most perfect design','Combine a lotus and a geometric star'],td=new Date().toDateString();
+const dd=()=>{try{return JSON.parse(localStorage.getItem('rbc_streak'))||{n:0,d:''}}catch(e){return{n:0,d:''}}};
+function daily(){const s=dd(),dn=s.d==td;$('#dtx').textContent='Challenge of the day: '+DP[Math.floor(Date.now()/864e5)%DP.length];$('#stk').textContent=s.n;$('#dgo').disabled=dn;$('#dgo span').textContent=dn?'Done today 🔥':'Mark done 🔥'}
+$('#dgo').onclick=()=>{const s=dd(),y=new Date(Date.now()-864e5).toDateString();try{localStorage.setItem('rbc_streak',JSON.stringify({n:s.d==y?s.n+1:1,d:td}))}catch(e){}daily();toast('Challenge complete — streak kept!')};
+$('#tipx').onclick=()=>{$('#tip').classList.add('h');try{localStorage.setItem('rbc_tip',1)}catch(e){}};
+/* ---------- language: English / Hindi / Gujarati (static labels) ---------- */
+const TR={hi:{'Home':'होम','Studio':'स्टूडियो','Gallery':'गैलरी','My Designs':'मेरे डिज़ाइन','Start Creating':'बनाना शुरू करें','Browse Gallery':'गैलरी देखें','Create Your Own Digital Rangoli':'अपनी डिजिटल रंगोली बनाएँ','Where Indian Tradition Meets the Magic of Code.':'जहाँ भारतीय परंपरा कोड के जादू से मिलती है।','The Rangoli Studio':'रंगोली स्टूडियो','Pattern Gallery':'पैटर्न गैलरी','My Saved Designs':'मेरे सहेजे डिज़ाइन','Brush':'ब्रश','Floor':'फ़र्श','Colours':'रंग','Name your rangoli':'अपनी रंगोली का नाम','Festival mode':'त्योहार मोड','Pattern generator':'पैटर्न जनरेटर','Actions':'क्रियाएँ','Live preview':'लाइव पूर्वावलोकन','Draw':'बनाएँ','Dots':'बिंदु','Circles':'वृत्त','Flowers':'फूल','Stars':'तारे','Powder':'पाउडर','Eraser':'रबर','Generate New Design':'नया डिज़ाइन बनाएँ','Surprise Me (random style + colours)':'सरप्राइज़ (रैंडम शैली + रंग)','Layer on top, keep my canvas':'कैनवस रखकर ऊपर परत जोड़ें','Pattern size (live)':'पैटर्न आकार (लाइव)','Detail layers (live)':'विवरण परतें (लाइव)','Undo':'पूर्ववत','Redo':'फिर से','Clear':'साफ़ करें','Reset':'रीसेट','Save':'सहेजें','Share':'साझा करें','PNG':'PNG','Full screen':'पूर्ण स्क्रीन','Replay':'फिर चलाएँ','Guide dots':'गाइड बिंदु','Video':'वीडियो','Greeting card':'शुभकामना कार्ड','Copy code':'कोड कॉपी','Import code':'कोड आयात','Symmetry':'समरूपता','Brush size':'ब्रश आकार','Random colours':'रैंडम रंग','Got it':'ठीक है'},
+gu:{'Home':'઩ોમ','Studio':'સ્ટુડિયો','Gallery':'ગેલેરી','My Designs':'મારી ડિઝાઇન','Start Creating':'બનાવવાનું શરૂ કરો','Browse Gallery':'ગેલેરી જુઓ','Create Your Own Digital Rangoli':'તમારી પોતાની ડિજિટલ રંગોળી બનાવો','Where Indian Tradition Meets the Magic of Code.':'જ્યાં ભારતીય પરંપરા કોડના જાદુને મળે છે.','The Rangoli Studio':'રંગોળી સ્ટુડિયો','Pattern Gallery':'પેટર્ન ગેલેરી','My Saved Designs':'મારી સાચવેલી ડિઝાઇન','Brush':'બ્રશ','Floor':'ફ્લોર','Colours':'રંગો','Name your rangoli':'તમારી રંગોળીનું નામ','Festival mode':'તહેવાર મોડ','Pattern generator':'પેટર્ન જનરેટર','Actions':'ક્રિયાઓ','Live preview':'લાઇવ પ્રીવ્યૂ','Draw':'દોરો','Dots':'ટપકાં','Circles':'વર્તુળો','Flowers':'ફૂલો','Stars':'તારા','Powder':'પાવડર','Eraser':'રબર','Generate New Design':'નવી ડિઝાઇન બનાવો','Surprise Me (random style + colours)':'સરપ્રાઇઝ (રેન્ડમ શૈલી + રંગો)','Layer on top, keep my canvas':'કેન્વાસ રાખીને ઉપર સ્તર ઉમેરો','Pattern size (live)':'પેટર્ન કદ (લાઇવ)','Detail layers (live)':'વિગતવાર સ્તરો (લાઇવ)','Undo':'પાછું','Redo':'ફરી','Clear':'સાફ કરો','Reset':'રીસેટ','Save':'સાચવો','Share':'શેર કરો','PNG':'PNG','Full screen':'પૂર્ણ સ્ક્રીન','Replay':'ફરી ચલાવો','Guide dots':'માર્ગદર્શક ટપકાં','Video':'વિડિયો','Greeting card':'શુભેચ્છા કાર્ડ','Copy code':'કોડ કોપી','Import code':'કોડ આયાત','Symmetry':'સમપ્રમાણતા','Brush size':'બ્રશ કદ','Random colours':'રેન્ડમ રંગો','Got it':'સમજાયું'}},orig=new Map();
+function lang(l){try{localStorage.setItem('rbc_lang',l)}catch(e){}
+ const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
+ while(n=w.nextNode()){const p=n.parentNode.nodeName;if(p=='SCRIPT'||p=='STYLE'||p=='OPTION')continue;
+  if(!orig.has(n)){const k=n.nodeValue.trim().replace(/^[^A-Za-z]+/,'');if(!k||!(k in TR.hi))continue;orig.set(n,n.nodeValue)}
+  const o=orig.get(n);if(l=='en'){n.nodeValue=o;continue}
+  const t=o.trim(),k=t.replace(/^[^A-Za-z]+/,'');n.nodeValue=t.slice(0,t.length-k.length)+TR[l][k]}}
+$('#lang').onchange=e=>lang(e.target.value);
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key=='z'){e.preventDefault();(e.shiftKey?$('#redo'):$('#undo')).click()}if((e.ctrlKey||e.metaKey)&&e.key=='y'){e.preventDefault();$('#redo').click()}});
+$('#fs').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else{const s=$('#studio');(s.requestFullscreen?s.requestFullscreen():Promise.reject()).catch(()=>toast('Full screen is not supported in this browser'))}};
+
+/* ---------- export / share / storage ---------- */
+function png(cb){const S=2400,c=document.createElement('canvas');c.width=c.height=S;const x=c.getContext('2d');render(x,acts,S);x.setTransform(1,0,0,1,0,0);
+ x.strokeStyle='#ffd34d';x.lineWidth=26;x.strokeRect(13,13,S-26,S-26);x.textAlign='center';x.fillStyle='#ffd34d';x.shadowColor='#000';x.shadowBlur=14;x.font='700 64px Georgia,serif';x.fillText(nm(),S/2,S-70);
+ x.font='italic 32px Georgia,serif';x.fillStyle='#fbeed2';x.fillText(($('#gr').value.trim()||'Happy Festive Season')+' · Rangoli by Code',S/2,S-26);c.toBlob(cb,'image/png')}
+$('#dl').onclick=()=>png(async b=>{const f=nm().replace(/[^\w]+/g,'-').toLowerCase()+'.png';
+ try{const d=window.claude&&await claude.use('downloads');if(d){await d.save({filename:f,data:b});toast('PNG saved ✨');return}}catch(e){if(e&&e.code=='declined')return}
+ const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=f;a.click();toast('Downloading PNG…')});
+$('#share').onclick=()=>png(async b=>{const f=new File([b],'rangoli.png',{type:'image/png'}),d={title:nm(),text:'Look at the rangoli I made on Rangoli by Code! 🪔 Happy festive season'};
+ try{if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({...d,files:[f]});else if(navigator.share)await navigator.share({...d,url:location.href});else{await navigator.clipboard.writeText(d.text+' '+location.href);toast('Share text copied to clipboard')}}
+ catch(e){if(e.name!='AbortError'){try{await navigator.clipboard.writeText(d.text+' '+location.href);toast('Share text copied to clipboard')}catch(_){toast('Use the PNG button to download & share')}}}});
+const LS='rbc_designs',load=()=>{try{return JSON.parse(localStorage.getItem(LS))||[]}catch(e){return[]}};
+const store=d=>{try{localStorage.setItem(LS,JSON.stringify(d));return true}catch(e){toast('Browser storage is full or blocked — use PNG instead');return false}};
+$('#save').onclick=()=>{if(!acts.length)return toast('Draw or generate something first');if(store([{name:nm(),acts,floor:st.floor},...load()].slice(0,12))){toast('Saved to My Designs ✨');showSaved()}};
+function card(name,A,tag,click,del){const d=document.createElement('div'),c=document.createElement('canvas');c.width=c.height=260;render(c.getContext('2d'),A,260);d.className='card';d.append(c);
+ d.insertAdjacentHTML('beforeend','<p></p>'+(tag?'<span class="tag">🪔 Festive</span>':''));d.querySelector('p').textContent=name;d.onclick=click;
+ if(del){const x=document.createElement('button');x.className='x';x.textContent='×';x.setAttribute('aria-label','Delete');x.onclick=e=>{e.stopPropagation();del()};d.append(x)}return d}
+function showSaved(){const g=$('#saved'),d=load();g.innerHTML='';if(!d.length)g.innerHTML='<div class="empty">Nothing saved yet. Create a rangoli and press 💾 Save to keep it here.</div>';
+ d.forEach((o,i)=>g.append(card(o.name,o.acts,0,()=>{acts=o.acts.slice();redo=[];st.floor=o.floor|0;floors();$('#nm').value=o.name;full();go('studio')},()=>{d.splice(i,1);store(d);showSaved()})))}
+const GAL=[['Royal Mandala','mandala',11,'Royal Gold'],['Marigold Floral','floral',23,'Traditional Indian'],['Peacock Fan','peacock',7,'Peacock Dreams'],['Kolam Star','geo',5,'Sunset Festival'],
+['Diya Ring','diya',3,'Diwali Glow',1],['Lakshmi Lotus','lotus',9,'Diwali Glow',1],['Golden Rangoli','gold',14,'Royal Gold',1],['Pastel Bloom','floral',31,'Pastel Elegance'],
+['Peacock Mandala','mandala',42,'Peacock Dreams'],['Festival Geometry','geo',77,'Traditional Indian'],['Golden Diyas','diya',61,'Royal Gold',1],['Sunset Lotus','lotus',18,'Sunset Festival',1]];
+GAL.forEach(([n,k,s,p,t])=>$('#gal').append(card(n,[mk(k,s,PAL[p])],t,()=>{acts=[mk(k,s,PAL[p])];redo=[];$('#nm').value=n;st.kind=k;kinds();full();go('studio');toast(n+' loaded')})));
+
+/* ---------- decorative: diyas, preview, greeting, particles ---------- */
+document.querySelectorAll('.dr').forEach(r=>{const n=r.classList.contains('h')?9:8;for(let i=0;i<n;i++){const s=document.createElement('span');s.textContent='🪔';s.style.animationDelay=(Math.random()*1.8)+'s';r.append(s)}});
+(function(){const p=$('#pv'),x=p.getContext('2d'),ks=Object.keys(KINDS),pn=Object.keys(PAL);
+ const draw=()=>{const k=ks[Math.random()*ks.length|0];render(x,[mk(k,Math.random()*1e9|0,PAL[pn[Math.random()*pn.length|0]])],480)};
+ draw();setInterval(()=>{p.style.opacity=0;setTimeout(()=>{draw();p.style.opacity=1},700)},7000)})();
+(function(){const g=$('#greet'),L=['उत्सव की शुभकामनाएँ','Happy Festive Season','May light fill your home','Light a diya, draw a dream'];let i=0;
+ setInterval(()=>{g.classList.add('out');setTimeout(()=>{g.textContent=L[++i%L.length];g.classList.remove('out')},500)},3200)})();
+(function(){const c=$('#fx'),x=c.getContext('2d');let W,H;const fit=()=>{W=c.width=innerWidth;H=c.height=innerHeight};fit();addEventListener('resize',fit);
+ const P=Array.from({length:55},()=>({x:Math.random(),y:Math.random(),r:1+Math.random()*2.6,v:.00012+Math.random()*.0003,p:Math.random()*TAU}));
+ (function f(t){x.clearRect(0,0,W,H);for(const q of P){q.y-=q.v*16;if(q.y<-.02){q.y=1.02;q.x=Math.random()}const a=.35+.45*Math.sin(t/600+q.p),px=(q.x+Math.sin(t/3000+q.p)*.012)*W;
+  x.beginPath();x.arc(px,q.y*H,q.r,0,TAU);x.fillStyle=`rgba(255,${200+q.r*15|0},77,${a})`;x.shadowColor='#ffb300';x.shadowBlur=10;x.fill()}requestAnimationFrame(f)})(0)})();
+(function lp(){const l=$('#lp').getContext('2d');(function f(){if(dirty){l.drawImage(cv,0,0,220,220);dirty=false}requestAnimationFrame(f)})()})();
+
+pals();swatches();kinds();showSaved();(function(){const ab=$('#undo').parentNode,hA=ab.previousElementSibling,s=$('#stage'),mid=document.createElement('div'),f=$('#fest');
+ mid.className='mid';s.before(mid);mid.append(s,ab);ab.id='bar';hA.remove();$('#code').style.gridColumn='1/-1';
+ $('#modes').parentNode.append(f.previousElementSibling,f)})();
+full();floors();daily();try{const l=localStorage.getItem('rbc_lang');if(l&&TR[l]){$('#lang').value=l;lang(l)}}catch(e){}try{if(localStorage.getItem('rbc_tip'))$('#tip').classList.add('h')}catch(e){}go(location.hash.slice(1),0);
+</script></body></html>
